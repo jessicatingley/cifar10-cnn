@@ -132,18 +132,17 @@ def train_net(net, trainloader, device, learn_rate: float, given_optimizer: str,
                 running_loss = 0.0
 
         _, val_loss = evaluate_net(net=net, loader=val_loader, device=device, criterion=criterion)
-        print("Best Loss: {}".format(best_loss))
-        print("Current Val Loss: {}".format(val_loss))
         if val_loss < best_loss:
             best_loss = val_loss
             epochs_since_best_loss = 0
-            print("Epochs since best loss: 0")
+
         else:
             epochs_since_best_loss +=1
-            print("Epochs since best loss: {}".format(epochs_since_best_loss))
+
         
         if epochs_since_best_loss >= patience:
             print("Validation loss hasn't improved in {} epochs. Stopping early.".format(patience))
+            break
         
 
 
