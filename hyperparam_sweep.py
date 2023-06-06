@@ -1,4 +1,6 @@
 import wandb
+import torch
+import torch.nn as nn
 from engine import *
 
 
@@ -14,7 +16,7 @@ sweep_config = {
         "dropout": {"values": [0, 0.1]},
         "batch_size": {"value": 512},
         "optimizer": {"value": "adam"},
-        "epochs": {"value": 5},
+        "epochs": {"value": 50},
         "depth": {"values": [16, 64]},
         "kernel_size": {"values": [5, 7]},
         "block_kernel_size": {"values": [3, 5]},
@@ -51,7 +53,7 @@ def main():
     train_loader, val_loader, test_loader = load_data(batch_size=batch_size, num_workers=2)
     model = create_net(depth, kernel_size, block_kernel_size, num_blocks, num_neurons, activation_func, dropout)
     train_net(model, trainloader=train_loader, device=device, learn_rate=learning_rate, given_optimizer=optimizer, 
-              epochs=epochs, val_loader=val_loader, criterion=nn.CrossEntropyLoss(), patience=5)
+              epochs=epochs, val_loader=val_loader, criterion=nn.CrossEntropyLoss(), patience=3)
     train_accs, train_losses = evaluate_net(model, train_loader, device, nn.CrossEntropyLoss())
     val_acc, val_loss = evaluate_net(model, val_loader, device, nn.CrossEntropyLoss())
     
